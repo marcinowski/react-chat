@@ -1,0 +1,27 @@
+{
+  "name": "chat",
+  "version": "1.0.0",
+  "description": "Training project for chat using Neutrino, Preact, Node and websockets",
+  "main": "index.js",
+  "scripts": {
+    "start": "neutrino start --use neutrino-preset-preact",
+    "build": "neutrino build --use neutrino-preset-preact"
+  },
+  "author": "Marcin Muszynski",
+  "license": "ISC",
+  "devDependencies": {
+    "babel-cli": "^6.26.0",
+    "babel-preset-env": "^1.6.0",
+    "eslint": "^4.7.2",
+    "neutrino": "^5.9.0",
+    "neutrino-preset-preact": "^1.4.0",
+    "neutrino-preset-react": "^5.9.0",
+    "websocket": "^1.0.24"
+  },
+  "dependencies": {
+    "preact": "^8.2.5",
+    "preact-compat": "^3.17.0",
+    "react": "^15.6.1",
+    "react-dom": "^15.6.1"
+  }
+}
