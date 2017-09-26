@@ -18,13 +18,13 @@ class Chat extends Component {
         client.onmessage = evt => {
             let data = JSON.parse(evt.data);
             this.setState({ messages: this.state.messages.concat(data)});
-        }
+        };
     };
 
     componentDidUpdate () {
         let w = document.getElementById('messages')
         w.scrollTop = w.scrollHeight;
-    }
+    };
 
     setMessage = e => {
         // saves message into the state
@@ -47,7 +47,7 @@ class Chat extends Component {
             }))
             this.setState({ authenticated: true });
         }
-    }
+    };
 
     sendMessage = () => {
         // sends message to the server if user is authenticated
@@ -72,10 +72,10 @@ class Chat extends Component {
                     <br></br>
                     <input id="username" value={username} onInput={this.setUsername}/>
                     &nbsp;
-                    <button className={styles.btn, styles.btnSuccess} type="submit">Log In!</button>
+                    <button className="btn btn-success btn-small" type="submit">Log In!</button>
                 </form>
                 <h3>You are logged in as <i>{ username }</i>.</h3>
-                <div id="messages" style="border: 1px solid black; height: 20vh; border-radius: 10px; overflow-y: scroll; padding: 10px;">
+                <div id="messages" style="border: 1px solid black; height: 70vh; border-radius: 10px; overflow-y: scroll; padding: 10px;">
                     { messages.map(m => {
                         if (m.username == this.state.username) {
                             return (
@@ -92,7 +92,7 @@ class Chat extends Component {
                     <label for="msg">Type your message</label>
                     <br></br>
                     <textarea style="width: 100%;" id="msg" onInput={this.setMessage}>{msg}</textarea>
-                    <button type="submit">Send message</button>
+                    <button className="btn btn-info btn-small pull-right" type="submit">Send message</button>
                 </form>
             </div>
         );
