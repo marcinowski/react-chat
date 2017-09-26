@@ -1,4 +1,5 @@
 
 chat/node_modules/*
 chat-server/node_modules/*
+*/npm-debug.log
 
