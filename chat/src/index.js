@@ -5,12 +5,12 @@ import MessageForm from './components/messageform';
 import styles from 'bootstrap/dist/css/bootstrap.css';
 
 var client = new WebSocket('ws://127.0.0.1:8000/');
-const anon = 'anonymous';
+
 
 class Chat extends Component {
     constructor() {
         super();
-        this.state.username = anon;
+        this.state.username = 'anonymous';
         this.state.messages = [];
         this.state.authenticated = false;
     };
@@ -59,7 +59,7 @@ class Chat extends Component {
             <div style="width: 50vw; margin: 20px;">
                 <AuthForm authenticate={this.sendUsername} />
                 <div>{(() => {
-                    if (username == anon) {
+                    if (!authenticated) {
                         return (<h3>You are not logged in.</h3>)
                     } else {
                         return (<h3>You are logged in as <i>{ username }</i>.</h3>)
