@@ -26,7 +26,7 @@ export default class AuthForm extends Component {
             <form onSubmit={this.sendUsername} action="javascript:">
                 <label for="username">Your nick</label>
                 <br></br>
-                <input id="username" value={username} onInput={this.setUsername}/>
+                <input id="username" value={username} onInput={this.setUsername} type="text" required/>
                 &nbsp;
                 <button className="btn btn-success btn-small" disabled={ authenticated } type="submit">
                     Log In!
