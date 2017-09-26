@@ -1,24 +1,7 @@
 import { h, render, Component } from 'preact';
-
+import Message from './message';
 
 var client = new WebSocket('ws://127.0.0.1:8000/');
-
-
-class Message extends Component {
-        constructor() {
-            super();
-            this.state.msg = '';
-            this.state.username = 'anonymous';
-        }
-        render({ props }, { state }) {
-            return (
-                <p><i>{ props.username }</i>:</p>
-                <span style="border-radius: 5px; border: 1px solid blue; padding: 5px">
-                    { props.msg }
-                </span>
-            );
-        }
-}
 
 
 class Chat extends Component {
@@ -38,18 +21,19 @@ class Chat extends Component {
     };
 
     setMessage = e => {
+        // saves message into the state
         this.setState({ msg: e.target.value });
     };
 
     setUsername = e => {
-        // this may be generalized to { e.target.id: e.target.value }
-        // this also should be handled independently by server
+        // saves username into the state
         if (this.state.authenticated == false) {
             this.setState({ username: e.target.value });
         }
     };
 
     sendUsername = () => {
+        // sends username to the server if the user hasn't authenticated himself
         if (this.state.authenticated == false) {
             client.send(JSON.stringify({
                 date: new Date(),
@@ -60,7 +44,7 @@ class Chat extends Component {
     }
 
     sendMessage = () => {
-        // to be improved
+        // sends message to the server if user is authenticated
         if (this.state.authenticated == true) {
             client.send(
                 JSON.stringify({
@@ -76,31 +60,27 @@ class Chat extends Component {
 
     render({ }, { msg, messages, username }) {
         return (
-            <div style="width: 50vw;">
+            <div style="width: 50vw; margin: 20px;">
                 <form onSubmit={this.sendUsername} action="javascript:">
                     <label for="username">Your nick</label>
+                    <br></br>
                     <input id="username" value={username} onInput={this.setUsername}/>
+                    &nbsp;
                     <button type="submit">Set username</button>
                 </form>
-                <h3>You are logged in as <i>{username}</i>.</h3>
+                <h3>You are logged in as <i>{ username }</i>.</h3>
                 <div id="messages" style="border: 1px solid black; height: 20vh; border-radius: 10px; overflow-y: scroll; padding: 10px;">
                     { messages.map(m => {
                         if (m.username == this.state.username) {
                             return (
                                 <div style="width: 50%; text-align: right; margin-left: 50%" title={ m.date }>
-                                    <p><i>You</i>:</p>
-                                    <span style="border-radius: 5px; border: 1px solid blue; padding: 5px">
-                                        { m.msg }
-                                    </span>
+                                    <Message username="You" msg={m.msg} />
                                 </div>
                             )
                         } else {
                             return (
                                 <div style="width: 50%;" title={ m.date }>
-                                    <p><i>{ m.username }</i>:</p>
-                                    <span style="border-radius: 5px; border: 1px solid blue; padding: 5px;">
-                                        { m.msg }
-                                    </span>
+                                    <Message username={ m.username } msg={m.msg} />
                                 </div>
                             )
                         };
@@ -117,5 +97,4 @@ class Chat extends Component {
     }
 }
 
-// render an instance of Clock into <body>:
 render(<Chat />, document.body);
