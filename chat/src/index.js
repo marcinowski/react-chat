@@ -1,5 +1,6 @@
 import { h, render, Component } from 'preact';
-import Message from './message';
+import {Message} from './message';
+import styles from 'bootstrap/dist/css/bootstrap.css';
 
 var client = new WebSocket('ws://127.0.0.1:8000/');
 
@@ -11,7 +12,7 @@ class Chat extends Component {
         this.state.username = 'anonymous';
         this.state.messages = [];
         this.state.authenticated = false;
-    }
+    };
 
     componentDidMount() {
         client.onmessage = evt => {
@@ -19,6 +20,11 @@ class Chat extends Component {
             this.setState({ messages: this.state.messages.concat(data)});
         }
     };
+
+    componentDidUpdate () {
+        let w = document.getElementById('messages')
+        w.scrollTop = w.scrollHeight;
+    }
 
     setMessage = e => {
         // saves message into the state
@@ -66,22 +72,18 @@ class Chat extends Component {
                     <br></br>
                     <input id="username" value={username} onInput={this.setUsername}/>
                     &nbsp;
-                    <button type="submit">Set username</button>
+                    <button className={styles.btn, styles.btnSuccess} type="submit">Log In!</button>
                 </form>
                 <h3>You are logged in as <i>{ username }</i>.</h3>
                 <div id="messages" style="border: 1px solid black; height: 20vh; border-radius: 10px; overflow-y: scroll; padding: 10px;">
                     { messages.map(m => {
                         if (m.username == this.state.username) {
                             return (
-                                <div style="width: 50%; text-align: right; margin-left: 50%" title={ m.date }>
-                                    <Message username="You" msg={m.msg} />
-                                </div>
+                                <Message username="You" msg={m.msg} date={m.date} style="width: 50%; text-align: right; margin-left: 50%" />
                             )
                         } else {
                             return (
-                                <div style="width: 50%;" title={ m.date }>
-                                    <Message username={ m.username } msg={m.msg} />
-                                </div>
+                                <Message username={ m.username } msg={m.msg} date={m.date} style="width: 50%;"/>
                             )
                         };
                     })}

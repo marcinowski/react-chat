@@ -19,6 +19,7 @@
     "websocket": "^1.0.24"
   },
   "dependencies": {
+    "bootstrap": "^3.3.7",
     "preact": "^8.2.5",
     "preact-compat": "^3.17.0",
     "react": "^15.6.1",
