@@ -14,9 +14,17 @@ var messages = [];
 wss.on('connection', socket => {
     console.log("Connection successful.");
     socket.on('message', message => {
+        var data = JSON.parse(message);
+        debugger;
+        if (socket.username === undefined) {
+            // we get it from the first message
+            socket.username = data.username;
+            data.msg = data.username + ' joined.'
+        };
         wss.clients.forEach(function each(client) {
             if (client.readyState === ws.OPEN) {
-                client.send(message);
+                data.username = socket.username;
+                client.send(JSON.stringify(data));
             }
         });
     });
