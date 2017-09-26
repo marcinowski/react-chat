@@ -1,15 +1,16 @@
 import { h, render, Component } from 'preact';
-import {Message} from './message';
+import {Message} from './components/message';
+import AuthForm from './components/authform';
 import styles from 'bootstrap/dist/css/bootstrap.css';
 
 var client = new WebSocket('ws://127.0.0.1:8000/');
-
+const anon = 'anonymous';
 
 class Chat extends Component {
     constructor() {
         super();
         this.state.msg = '';
-        this.state.username = 'anonymous';
+        this.state.username = anon;
         this.state.messages = [];
         this.state.authenticated = false;
     };
@@ -31,21 +32,15 @@ class Chat extends Component {
         this.setState({ msg: e.target.value });
     };
 
-    setUsername = e => {
-        // saves username into the state
-        if (this.state.authenticated == false) {
-            this.setState({ username: e.target.value });
-        }
-    };
-
-    sendUsername = () => {
+    sendUsername = (name) => {
         // sends username to the server if the user hasn't authenticated himself
         if (this.state.authenticated == false) {
             client.send(JSON.stringify({
                 date: new Date(),
-                username: this.state.username,
+                username: name,
             }))
             this.setState({ authenticated: true });
+            this.setState({ username: name });
         }
     };
 
@@ -67,14 +62,14 @@ class Chat extends Component {
     render({ }, { msg, messages, username }) {
         return (
             <div style="width: 50vw; margin: 20px;">
-                <form onSubmit={this.sendUsername} action="javascript:">
-                    <label for="username">Your nick</label>
-                    <br></br>
-                    <input id="username" value={username} onInput={this.setUsername}/>
-                    &nbsp;
-                    <button className="btn btn-success btn-small" type="submit">Log In!</button>
-                </form>
-                <h3>You are logged in as <i>{ username }</i>.</h3>
+                <AuthForm authenticate={this.sendUsername} />
+                <div>{(() => {
+                    if (username == anon) {
+                        return (<h3>You are not logged in.</h3>)
+                    } else {
+                        return (<h3>You are logged in as <i>{ username }</i>.</h3>)
+                    }
+                })()}</div>
                 <div id="messages" style="border: 1px solid black; height: 70vh; border-radius: 10px; overflow-y: scroll; padding: 10px;">
                     { messages.map(m => {
                         if (m.username == this.state.username) {
